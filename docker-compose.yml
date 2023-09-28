@@ -1,0 +1,36 @@
+version: '3'
+services:
+    gambling-test.app:
+        build:
+            context: .
+            dockerfile: .docker/app/Dockerfile
+        image: gambling-test.app
+        container_name: gambling-test.app
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www/html
+        env_file: .env
+        environment:
+            TZ: UTC
+            DB_HOST: ${DB_HOST}
+            DB_DATABASE: ${DB_DATABASE}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+    gambling-test.mysql:
+        build:
+            context: .
+            dockerfile: .docker/mysql/Dockerfile
+        image: gambling-test.mysql
+        container_name: gambling-test.mysql
+        ports:
+            - "3306:3306"
+        env_file: .env
+        environment:
+            TZ: UTC
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        volumes:
+            - ./.docker/mysql/data:/var/lib/mysql
